@@ -7,19 +7,25 @@ client = OpenAI(
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
 )
 
-messages = [{"role": "user", "content": "你是谁"}]
+messages = [{"role": "system","content":"你是ai助理，回复很简洁"},
+            {"role": "user","content":"小明有2条宠物狗"},
+            {"role": "assistant","content":"好的"},
+            {"role": "user", "content": "小红有3条宠物猫"},
+            {"role": "assistant", "content": "好的"},
+            {"role": "user", "content": "总共有几条宠物"}]
+
 completion = client.chat.completions.create(
     model="qwen3-max",  # 您可以按需更换为其它深度思考模型
     messages=messages,
     extra_body={"enable_thinking": False},
-    stream=True #流式输出
+    stream=True  # 流式输出
     
 )
 is_answering = False  # 是否进入回复阶段
 print("\n" + "=" * 20 + "思考过程" + "=" * 20)
 for chunk in completion:
     delta = chunk.choices[0].delta
-    if hasattr(delta, "reasoning_content") and delta.reasoning_content is not None:
+    if hasattr(delta, "reasoning_content") and delta.reasoning_congitent is not None:
         if not is_answering:
             print(delta.reasoning_content, end="", flush=True)
     if hasattr(delta, "content") and delta.content:
