@@ -41,11 +41,10 @@ messages = [{"role": "system",
 for key, value in examples_data.items():
     messages.append({"role": "user", "content": value})
     messages.append({"role": "assistant", "content": key})
-# print(*messages,sep="\n")
+    print(*messages,sep="\n")
 
 for q in questions:
     response = Client.chat.completions.create(model="qwen3-max",
-                                              messages=messages + [
-                                                  {"role": "user", "content": f"按照示例，回答这段文本的分类类别:{q}"}]
+                                              messages=messages + [{"role": "user", "content": f"按照示例，回答这段文本的分类类别:{q}"}]
                                               )
     print(response.choices[0].message.content)
